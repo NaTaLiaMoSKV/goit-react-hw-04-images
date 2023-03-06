@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 
 class ImageGalleryItem extends Component {
+
     render() {
         return (
-            <li className="imageGalleryItem">
-                <img className="imageGalleryItem-image" src="" alt="" />
-            </li>
+            <>
+                {this.props.images.map(({id, tags, webformatURL, largeImageURL }) => (
+                    <li key={id} className="imageGalleryItem" onClick={this.props.toggleModal}>
+                        <img className="imageGalleryItem-image" src={webformatURL} alt={tags} />
+                    </li>
+                ))}
+
+            </>
+                
+            
         )
     }
 }

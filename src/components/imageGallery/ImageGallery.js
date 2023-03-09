@@ -18,7 +18,7 @@ class ImageGallery extends Component {
         if (prevProps.imageName !== this.props.imageName) { // обновляется строка запроса
             this.props.showLoadingButton(0);
             this.props.images.length = 0; // обновление массива
-            this.state.images.length = 0;
+            this.setState({ images: [] });
             this.handleComponent(this.props.imageName, 1);
             
         }

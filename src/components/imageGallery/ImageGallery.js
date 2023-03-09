@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { ThreeDots } from "react-loader-spinner";
 import ImageGalleryItem from "components/imageGalleryItem/ImageGalleryItem";
 import api from "services/GalleryApi";
 import showLoader from "components/loader/Loader";
@@ -53,7 +52,7 @@ class ImageGallery extends Component {
 
     render() {
         const { images, loading, error } = this.state;
-        const { imageName, toggleModal, findCurrentImage } = this.props;
+        const { toggleModal, findCurrentImage } = this.props;
         return (
             <>
                 {error && <h2>{error}</h2>}

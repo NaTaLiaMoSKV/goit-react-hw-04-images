@@ -1,10 +1,8 @@
 import Searchbar from "./searchbar/Searchbar";
 import ImageGallery from "./imageGallery/ImageGallery";
-import showLoader from "components/loader/Loader";
 import Button from "./button/Button";
 import Modal from "./modal/Modal";
 import { Component } from "react";
-// import { ThreeDots } from "react-loader-spinner";
 
 
 class App extends Component {
@@ -47,7 +45,7 @@ class App extends Component {
   }
   
   render() {
-    const { imageName, page, loading, images, currentImage, showModal, showButton } = this.state;
+    const { imageName, page, images, currentImage, showModal, showButton } = this.state;
 
     return (
       <div className="app">

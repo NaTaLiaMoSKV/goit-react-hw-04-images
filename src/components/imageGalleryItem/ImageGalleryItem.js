@@ -5,9 +5,9 @@ class ImageGalleryItem extends Component {
     render() {
         return (
             <>
-                {this.props.images.map(({id, tags, webformatURL, largeImageURL }) => (
-                    <li key={id} className="imageGalleryItem" onClick={this.props.toggleModal}>
-                        <img className="imageGalleryItem-image" src={webformatURL} alt={tags} />
+                {this.props.images.map(image => (
+                    <li key={image.id} className="imageGalleryItem" onClick={this.props.toggleModal}>
+                        <img className="imageGalleryItem-image" src={image.webformatURL} alt={image.tags} onClick={() => this.props.findCurrentImage(image)} />
                     </li>
                 ))}
 

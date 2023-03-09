@@ -1,5 +1,6 @@
 import Searchbar from "./searchbar/Searchbar";
 import ImageGallery from "./imageGallery/ImageGallery";
+import showLoader from "components/loader/Loader";
 import Button from "./button/Button";
 import Modal from "./modal/Modal";
 import { Component } from "react";
@@ -7,9 +8,13 @@ import { Component } from "react";
 
 
 class App extends Component {
+  
   state = {
     imageName: null,
-    loading: false,
+    images: [],
+    page: 0,
+    currentImage: null,
+    showButton: false,
     showModal: false,
   };
 
@@ -20,25 +25,37 @@ class App extends Component {
   }
 
   handleSearchFormButton = imageName => {
-    this.setState({ imageName });
-
+    this.setState({ page: 1, imageName});
   }
 
+  findCurrentImage = currentImage => {
+    this.setState({ currentImage });
+  }
+
+  updateImagesAndTotal = (images, totalLength) => {
+    this.setState({ images });
+    this.showLoadingButton(totalLength);
+  }
+
+  showLoadingButton = (totalLength) => {
+    if (this.state.page * 12 < totalLength) this.setState({ showButton: true });
+    else this.setState({ showButton: false });
+  }
+
+  incrementPage = page => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  }
   
-
-
   render() {
-    const { showModal } = this.state;
+    const { imageName, page, loading, images, currentImage, showModal, showButton } = this.state;
 
     return (
       <div className="app">
-       
         <Searchbar onSubmit={this.handleSearchFormButton} />
-         
-        {showModal && <Modal toggleModal={this.toggleModal} />}
-        <ImageGallery imageName={this.state.imageName} toggleModal={this.toggleModal} />
-      <Button />
-    </div>
+        <ImageGallery page={page} imageName={imageName} images={images} showLoadingButton={this.showLoadingButton} findCurrentImage={this.findCurrentImage} updateImagesAndTotal={this.updateImagesAndTotal} toggleModal={this.toggleModal} toggleLoading={this.toggleLoading} />
+        {showModal && currentImage && <Modal currentImage={currentImage} toggleModal={this.toggleModal} />}
+        {showButton && <Button onClick={this.incrementPage} />}
+      </div>
     
   );
   }

@@ -1,43 +1,36 @@
-import React, { Component } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 const modal = document.querySelector("#modal-root");
 
-class Modal extends Component {
+export default function Modal({ currentImage, toggleModal }) {
 
-    componentDidMount() {
-        window.addEventListener('keydown', this.handleKeyDown);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleKeyDown);
-    }
-
-    handleKeyDown = (evt) => {
+    const handleKeyDown = (evt) => {
         if (evt.key === "Escape") {
-            this.props.toggleModal();
+            toggleModal();
         }
     }
 
-    handleOverlayClick = (evt) => {
+    const handleOverlayClick = (evt) => {
         if (evt.target === evt.currentTarget) {
-            this.props.toggleModal();
+            toggleModal();
         }
     }
 
-    render() {
-        const { currentImage } = this.props;
-        return (
-            createPortal(
-                <div className="overlay" onClick={this.handleOverlayClick}>
-                    <div className="modal">
-                        <img src={currentImage.largeImageURL} alt={currentImage.tags} />
-                    </div>
-                </div>, modal
-            )
-            
-        )
-    }
-}
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [handleKeyDown]);
 
-export default Modal;
+    return (
+        createPortal(
+            <div className="overlay" onClick={handleOverlayClick}>
+                <div className="modal">
+                    <img src={currentImage.largeImageURL} alt={currentImage.tags} />
+                </div>
+            </div>,
+            modal)
+    )
+}

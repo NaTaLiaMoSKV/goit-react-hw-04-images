@@ -4,79 +4,62 @@ import Button from "./button/Button";
 import Modal from "./modal/Modal";
 import api from "services/GalleryApi";
 import showLoader from "components/loader/Loader";
-import { Component } from "react";
+import { useState } from "react";
 
+export default function App() {
 
-class App extends Component {
-  
-  state = {
-    imageName: null,
-    images: [],
-    page: 0,
-    loading: false,
-    error: null,
-    currentImage: null,
-    showButton: false,
-    showModal: false,
-  };
+  const [imageName, setImageName] = useState(null);
+  const [images, setImages] = useState([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentImage, setCurrentImage] = useState(null);
+  const [showButton, setShowButton] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  toggleModal = () => {
-    this.setState(({showModal}) => ({
-      showModal: !showModal,
-    }));
+  const handleSearchFormButton = imageName => {
+    setPage(1);
+    setImageName(imageName);
+    setShowButton(false);
   }
 
-   fetchImageGallery = (imageName, page) => {
-      this.setState({ loading: true });
-      api.fetchGallery(imageName, page)
-          .then(res => {
-              this.setState({
-                images: [...this.state.images, ...res.hits],
-                totalLength: res.total,
-              });
-            this.showLoadingButton(res.total);
-              if (res.total === 0) {
-                  return Promise.reject(new Error(`No images found with title "${imageName}"`));
-              } else this.setState({ error: null });
-          })
-          .catch(error => { this.setState({ error: error.message }) })
-          .finally(this.setState({ loading: false }));
-        
-    }
-
-  handleSearchFormButton = imageName => {
-    this.setState({ page: 1, imageName });
-    this.setState({ showButton: false });
+  const fetchImageGallery = (currentImageName, currentPage) => {
+    if (page === 0) return;
+    if (page === 1) setImages([]);
+    setLoading(true);
+      api.fetchGallery(currentImageName, currentPage)
+        .then(res => {
+          setImages([...images, ...res.hits]);
+          showLoadingButton(res.total);
+          if (res.total === 0) {
+              return Promise.reject(new Error(`No images found with title "${currentImageName}"`));
+          } else setError(null);
+        })
+        .catch(error => { setError(error.message) })
+        .finally(setLoading(false));
   }
 
-  findCurrentImage = currentImage => {
-    this.setState({ currentImage });
+  const showLoadingButton = (totalLength) => {
+    page * 12 < totalLength ? setShowButton(true) : setShowButton(false);
   }
 
-  showLoadingButton = (totalLength) => {
-    if (this.state.page * 12 < totalLength) this.setState({ showButton: true });
-    else this.setState({ showButton: false });
+  const toggleModal = () => {
+    setShowModal(!showModal);
   }
 
-  incrementPage = page => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  const incrementPage = () => {
+    setPage(page + 1);
   }
-  
-  render() {
-    const { imageName, page, images, error, loading, currentImage, showModal, showButton } = this.state;
 
-    return (
-      <div className="app">
-        <Searchbar onSubmit={this.handleSearchFormButton} />
-        {error && <h2>{error}</h2>}
-        {loading && showLoader()};
-        <ImageGallery page={page} imageName={imageName} images={images} handleGallery={this.fetchImageGallery} findCurrentImage={this.findCurrentImage} toggleModal={this.toggleModal} />
-        {showModal && currentImage && <Modal currentImage={currentImage} toggleModal={this.toggleModal} />}
-        {showButton && <Button onClick={this.incrementPage} />}
-      </div>
+  return (
+    <div className="app">
+      <Searchbar onSearchbarSumbit={handleSearchFormButton} />
+      {error && <h2>{error}</h2>}
+      {loading && showLoader()};
+      <ImageGallery page={page} imageName={imageName} images={images} handleGallery={fetchImageGallery} findCurrentImage={setCurrentImage} toggleModal={toggleModal} />
+      {showModal && currentImage && <Modal currentImage={currentImage} toggleModal={toggleModal} />}
+      {showButton && <Button onButtonClick={incrementPage} />}
+    </div>
     
   );
-  }
-  
-};
-export default App;
+}

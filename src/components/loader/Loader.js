@@ -1,6 +1,6 @@
 import { ThreeDots } from "react-loader-spinner";
 
-function showLoader() {
+export default function showLoader() {
     return (
         <ThreeDots height="70" width="70" radius="9"
             color="#3f51b5" ariaLabel="three-dots-loading"
@@ -8,5 +8,3 @@ function showLoader() {
             visible={true} />
     )
 }
-
-export default showLoader;

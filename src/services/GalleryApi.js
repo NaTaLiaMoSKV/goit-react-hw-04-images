@@ -1,4 +1,3 @@
-
 const API_KEY = '32970043-afcc677e938f183a59875dbcc';
 
 async function fetchGallery(imageName, page) {

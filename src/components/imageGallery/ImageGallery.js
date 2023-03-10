@@ -4,13 +4,12 @@ import ImageGalleryItem from "components/imageGalleryItem/ImageGalleryItem";
 export default function ImageGallery({ page, imageName, images, handleGallery, findCurrentImage, toggleModal }) {
 
     useEffect(() => {
-        images.length = 0;
         handleGallery(imageName, 1);
     }, [imageName]);
     
     useEffect(() => {
         handleGallery(imageName, page);
-    }, [ page]);
+    }, [page]);
     
     return (
         <>

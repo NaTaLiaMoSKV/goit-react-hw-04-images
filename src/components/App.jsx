@@ -25,7 +25,7 @@ export default function App() {
 
   const fetchImageGallery = (currentImageName, currentPage) => {
     if (page === 0) return;
-    if (page === 1) setImages([]);
+    if (page === 1) { images.length = 0; setImages([]); }
     setLoading(true);
       api.fetchGallery(currentImageName, currentPage)
         .then(res => {

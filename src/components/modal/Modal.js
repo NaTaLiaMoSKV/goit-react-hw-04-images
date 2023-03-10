@@ -5,11 +5,11 @@ const modal = document.querySelector("#modal-root");
 
 export default function Modal({ currentImage, toggleModal }) {
 
-    const handleKeyDown = (evt) => {
-        if (evt.key === "Escape") {
-            toggleModal();
-        }
-    }
+    // const handleKeyDown = (evt) => {
+    //     if (evt.key === "Escape") {
+    //         toggleModal();
+    //     }
+    // }
 
     const handleOverlayClick = (evt) => {
         if (evt.target === evt.currentTarget) {
@@ -18,11 +18,17 @@ export default function Modal({ currentImage, toggleModal }) {
     }
 
     useEffect(() => {
+        
+        const handleKeyDown = (evt) => {
+            if (evt.key === "Escape") {
+                toggleModal();
+            }
+        }
         window.addEventListener('keydown', handleKeyDown);
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         }
-    }, [handleKeyDown]);
+    }, [toggleModal]);
 
     return (
         createPortal(

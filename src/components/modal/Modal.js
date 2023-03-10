@@ -37,6 +37,7 @@ export default function Modal({ currentImage, toggleModal }) {
                     <img src={currentImage.largeImageURL} alt={currentImage.tags} />
                 </div>
             </div>,
-            modal)
+            modal
+        )
     )
 }

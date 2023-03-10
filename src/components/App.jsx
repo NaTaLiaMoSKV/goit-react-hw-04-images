@@ -23,16 +23,16 @@ export default function App() {
     setShowButton(false);
   }
 
-  const fetchImageGallery = (currentImageName, currentPage) => {
+  const fetchImageGallery = (currentPage) => {
     if (page === 0) return;
     if (page === 1) { images.length = 0; setImages([]); }
     setLoading(true);
-      api.fetchGallery(currentImageName, currentPage)
+      api.fetchGallery(imageName, currentPage)
         .then(res => {
           setImages([...images, ...res.hits]);
           showLoadingButton(res.total);
           if (res.total === 0) {
-              return Promise.reject(new Error(`No images found with title "${currentImageName}"`));
+              return Promise.reject(new Error(`No images found with title "${imageName}"`));
           } else setError(null);
         })
         .catch(error => { setError(error.message) })
